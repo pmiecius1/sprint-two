@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getNote, updateNote, deleteNote } from "@/lib/notes";
+import { getNote, updateNote, deleteNote } from "@/lib/db";
 
 export default async function NoteEditorPage({
   params,
