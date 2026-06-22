@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getNote, updateNote, deleteNote } from "@/lib/db";
+import { getCollections, getNote, getTags, updateNote, deleteNote } from "@/lib/db";
+import { CollectionPicker } from "@/components/notes/collection-picker";
+import { TagEditor } from "@/components/notes/tag-editor";
 
 export default async function NoteEditorPage({
   params,
@@ -9,7 +11,11 @@ export default async function NoteEditorPage({
 }) {
   const { id } = await params;
   const noteId = Number(id);
-  const note = await getNote(noteId);
+  const [note, collections, allTags] = await Promise.all([
+    getNote(noteId),
+    getCollections(),
+    getTags(),
+  ]);
 
   if (!note) notFound();
 
@@ -20,6 +26,15 @@ export default async function NoteEditorPage({
         <Link href="/notes" className="text-sm underline underline-offset-4">
           Back to notes
         </Link>
+      </div>
+
+      <div className="mb-6 flex flex-col gap-4 rounded-md border p-4">
+        <CollectionPicker
+          noteId={note.id}
+          collections={collections}
+          currentCollectionId={note.collection_id}
+        />
+        <TagEditor noteId={note.id} tags={note.tags} allTags={allTags} />
       </div>
 
       <form action={updateNote} className="flex flex-col gap-4">
