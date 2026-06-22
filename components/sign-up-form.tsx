@@ -88,6 +88,10 @@ export function SignUpForm({
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
+                <p className="text-sm text-muted-foreground">
+                  Password must be at least 8 characters and include
+                  uppercase, lowercase letter, digits and symbols.
+                </p>
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
