@@ -3,8 +3,9 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { isTagColor } from "@/components/notes/tag-colors";
 
-export type Tag = { id: number; name: string };
+export type Tag = { id: number; name: string; color: string };
 export type Collection = { id: number; name: string; created_at: string };
 
 export type Note = {
@@ -28,7 +29,7 @@ type RawNoteRow = {
 };
 
 const NOTE_SELECT =
-  "id, title, body, created_at, updated_at, collection_id, note_tags(tags(id, name))";
+  "id, title, body, created_at, updated_at, collection_id, note_tags(tags(id, name, color))";
 
 function mapNote(row: RawNoteRow): Note {
   return {
@@ -166,11 +167,25 @@ export async function getTags(): Promise<Tag[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("tags")
-    .select("id, name")
+    .select("id, name, color")
     .order("name", { ascending: true });
 
   if (error) throw new Error(error.message);
   return data;
+}
+
+export async function updateTagColor(tagId: number, color: string) {
+  if (!isTagColor(color)) throw new Error("Invalid tag color");
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("tags")
+    .update({ color })
+    .eq("id", tagId);
+
+  if (error) throw new Error(error.message);
+
+  revalidatePath("/notes");
 }
 
 export async function addTagToNote(noteId: number, tagName: string): Promise<Tag> {
@@ -182,7 +197,7 @@ export async function addTagToNote(noteId: number, tagName: string): Promise<Tag
   const { data: tag, error: tagError } = await supabase
     .from("tags")
     .upsert({ name: trimmed }, { onConflict: "name" })
-    .select("id, name")
+    .select("id, name, color")
     .single();
 
   if (tagError) throw new Error(tagError.message);
