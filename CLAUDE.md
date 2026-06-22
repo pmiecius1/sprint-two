@@ -1,5 +1,12 @@
 # CLAUDE.md
 
+## Tech stack
+
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
+- Supabase, with the Supabase MCP server
+
 ## Database changes
 
 For changes to the database (schema changes, seed data, etc.), always use a Supabase migration (`apply_migration`) rather than direct row inserts/updates outside of a migration.
