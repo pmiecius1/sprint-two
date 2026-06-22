@@ -1,5 +1,7 @@
+import { Suspense } from "react";
 import { getCollections, getNotes, getTags } from "@/lib/db";
 import { NotesWorkspace } from "@/components/notes/notes-workspace";
+import { AuthButton } from "@/components/auth-button";
 
 export default async function NotesLayout({
   children,
@@ -13,7 +15,16 @@ export default async function NotesLayout({
   ]);
 
   return (
-    <NotesWorkspace notes={notes} collections={collections} tags={tags}>
+    <NotesWorkspace
+      notes={notes}
+      collections={collections}
+      tags={tags}
+      authButton={
+        <Suspense>
+          <AuthButton />
+        </Suspense>
+      }
+    >
       {children}
     </NotesWorkspace>
   );

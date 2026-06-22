@@ -20,11 +20,13 @@ export function NotesWorkspace({
   notes,
   collections,
   tags,
+  authButton,
   children,
 }: {
   notes: Note[];
   collections: Collection[];
   tags: Tag[];
+  authButton: React.ReactNode;
   children: React.ReactNode;
 }) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -49,7 +51,7 @@ export function NotesWorkspace({
 
   return (
     <div className="flex min-h-svh w-full flex-col">
-      <div className="border-b p-3">
+      <div className="flex items-center justify-between gap-4 border-b p-3">
         <input
           type="search"
           placeholder="Search notes by title or body..."
@@ -57,6 +59,7 @@ export function NotesWorkspace({
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full max-w-md rounded-md border px-3 py-2 text-sm"
         />
+        {authButton}
       </div>
       <div className="flex flex-1">
         <NotesSidebar
