@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { createNote } from "@/lib/notes";
+import { createNote } from "@/lib/db";
 
 export default function NewNotePage() {
   return (

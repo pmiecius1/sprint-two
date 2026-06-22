@@ -11,6 +11,13 @@
 
 For changes to the database (schema changes, seed data, etc.), always use a Supabase migration (`apply_migration`) rather than direct row inserts/updates outside of a migration.
 
+## Data access
+
+All Supabase table reads and writes go through `lib/db.ts` — don't create per-table
+helper files (e.g. `lib/collections.ts`, `lib/tags.ts`) and don't call
+`supabase.from(...)` directly from pages or components. As collections, tags, and
+note_tags get real CRUD code, add it to `lib/db.ts` rather than a new module.
+
 ## Authentication rules
 
 - Use Supabase Auth for all sign-in and session handling — never build custom auth or store passwords yourself.

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getNotes } from "@/lib/notes";
+import { getNotes } from "@/lib/db";
 
 export default async function NotesPage() {
   const notes = await getNotes();
