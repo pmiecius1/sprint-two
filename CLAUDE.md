@@ -4,6 +4,9 @@
 
 For changes to the database (schema changes, seed data, etc.), always use a Supabase migration (`apply_migration`) rather than direct row inserts/updates outside of a migration.
 
-## Auth-gated pages
+## Authentication rules
 
-Every signed-in-only page must verify the user's session with the Supabase Auth server before it loads, and redirect to the sign-in page if the user is not signed in. Do not rely on the browser-side session alone.
+- Use Supabase Auth for all sign-in and session handling — never build custom auth or store passwords yourself.
+- Every page under /workspace requires a signed-in user; verify this on the server and redirect to /login if they are not signed in.
+- After a successful sign-in, redirect to /workspace.
+- After sign-out, redirect to /login.

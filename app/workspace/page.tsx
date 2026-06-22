@@ -10,13 +10,13 @@ async function UserDetails() {
   const { data, error } = await supabase.auth.getClaims();
 
   if (error || !data?.claims) {
-    redirect("/auth/login");
+    redirect("/login");
   }
 
   return JSON.stringify(data.claims, null, 2);
 }
 
-export default function ProtectedPage() {
+export default function WorkspacePage() {
   return (
     <div className="flex-1 w-full flex flex-col gap-12">
       <div className="w-full">
