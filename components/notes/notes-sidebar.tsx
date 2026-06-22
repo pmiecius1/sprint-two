@@ -102,7 +102,8 @@ export function NotesSidebar({
 
   const uncollectedNotes = notes.filter((note) => note.collection_id === null);
   const hasTagFilter = selectedTagIds.length > 0;
-  const tagFilterHasNoMatches = hasTagFilter && notes.length === 0;
+  const tagFilterHasNoMatches =
+    hasTagFilter && !isSearching && notes.length === 0;
 
   return (
     <aside className="w-72 shrink-0 border-r overflow-y-auto">
@@ -163,7 +164,11 @@ export function NotesSidebar({
           <CollectionGroup
             title="Search results"
             notes={notes}
-            emptyMessage="No notes match your search."
+            emptyMessage={
+              hasTagFilter
+                ? "No notes match your search within the selected tags."
+                : "No notes match your search."
+            }
             defaultExpanded
           />
         ) : (
