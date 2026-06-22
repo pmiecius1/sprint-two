@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { addTagToNote, removeTagFromNote } from "@/lib/db";
 import type { Tag } from "@/lib/db";
+import { TagColorPicker } from "@/components/notes/tag-color-picker";
 
 export function TagEditor({
   noteId,
@@ -54,6 +55,7 @@ export function TagEditor({
               key={tag.id}
               className="flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground"
             >
+              <TagColorPicker tagId={tag.id} color={tag.color} />
               {tag.name}
               <button
                 type="button"

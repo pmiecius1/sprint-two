@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createCollection } from "@/lib/db";
 import type { Collection, Note, Tag } from "@/lib/db";
+import { TagDot, TagColorPicker } from "@/components/notes/tag-color-picker";
 
 function NoteCard({ note }: { note: Note }) {
   return (
@@ -18,8 +19,9 @@ function NoteCard({ note }: { note: Note }) {
           {note.tags.map((tag) => (
             <span
               key={tag.id}
-              className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground"
+              className="flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground"
             >
+              <TagDot color={tag.color} />
               {tag.name}
             </span>
           ))}
@@ -134,19 +136,20 @@ export function NotesSidebar({
             {allTags.map((tag) => {
               const selected = selectedTagIds.includes(tag.id);
               return (
-                <button
+                <span
                   key={tag.id}
-                  type="button"
-                  onClick={() => onToggleTag(tag.id)}
                   className={
-                    "rounded-full px-2 py-0.5 text-xs " +
+                    "flex items-center gap-1 rounded-full pl-1 pr-2 py-0.5 text-xs " +
                     (selected
                       ? "bg-foreground text-background"
                       : "bg-muted text-muted-foreground hover:bg-accent")
                   }
                 >
-                  {tag.name}
-                </button>
+                  <TagColorPicker tagId={tag.id} color={tag.color} />
+                  <button type="button" onClick={() => onToggleTag(tag.id)}>
+                    {tag.name}
+                  </button>
+                </span>
               );
             })}
           </div>
