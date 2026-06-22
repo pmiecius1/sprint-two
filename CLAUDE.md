@@ -29,3 +29,9 @@ note_tags get real CRUD code, add it to `lib/db.ts` rather than a new module.
 
 - One branch per feature → PR → merge → delete branch.
 - Branch name matches the feature (e.g. `dark-mode-toggle`, `starred-documents`).
+
+## Verification
+
+The app runs and is verified locally (`npm run dev`, `tsc --noEmit`, `eslint`) before
+work is considered done. Confirm changes against the running dev server rather than
+relying on type-checking alone.
