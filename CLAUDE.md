@@ -21,8 +21,8 @@ note_tags get real CRUD code, add it to `lib/db.ts` rather than a new module.
 ## Authentication rules
 
 - Use Supabase Auth for all sign-in and session handling — never build custom auth or store passwords yourself.
-- Every page under /workspace requires a signed-in user; verify this on the server and redirect to /login if they are not signed in.
-- After a successful sign-in, redirect to /workspace.
+- Every page under /notes requires a signed-in user; verify this on the server and redirect to /login if they are not signed in.
+- After a successful sign-in, redirect to /notes.
 - After sign-out, redirect to /login.
 
 # Git workflow
