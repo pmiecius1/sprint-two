@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createCollection, updateCollectionName } from "@/lib/db";
@@ -46,44 +46,78 @@ function CollectionGroup({
 }) {
   const router = useRouter();
   const [expanded, setExpanded] = useState(defaultExpanded);
-  const [isRenaming, setIsRenaming] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [name, setName] = useState(title);
+  const [isSaving, setIsSaving] = useState(false);
 
-  async function handleRename() {
-    const name = window.prompt("Collection name", title);
-    if (!name || !name.trim() || collectionId === undefined) return;
+  useEffect(() => {
+    setName(title);
+  }, [title]);
 
-    setIsRenaming(true);
+  async function handleSave() {
+    const trimmed = name.trim();
+    setIsEditing(false);
+
+    if (!trimmed || trimmed === title || collectionId === undefined) {
+      setName(title);
+      return;
+    }
+
+    setIsSaving(true);
     try {
-      await updateCollectionName(collectionId, name);
+      await updateCollectionName(collectionId, trimmed);
       router.refresh();
     } finally {
-      setIsRenaming(false);
+      setIsSaving(false);
     }
   }
 
   return (
-    <div className="group border-b py-2">
-      <div className="flex w-full items-center justify-between gap-1 px-2 py-1">
+    <div className="border-b py-2">
+      <div className="flex w-full items-center justify-between gap-1 px-2 py-1 text-sm font-semibold">
+        {isEditing ? (
+          <input
+            autoFocus
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            onBlur={handleSave}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSave();
+              }
+              if (e.key === "Escape") {
+                setName(title);
+                setIsEditing(false);
+              }
+            }}
+            disabled={isSaving}
+            className="-mx-1 flex-1 rounded border px-1 text-sm font-semibold"
+          />
+        ) : (
+          <span
+            onClick={() =>
+              collectionId !== undefined
+                ? setIsEditing(true)
+                : setExpanded((prev) => !prev)
+            }
+            className={
+              "flex-1 rounded px-1 -mx-1" +
+              (collectionId !== undefined
+                ? " cursor-text hover:bg-accent"
+                : " cursor-pointer")
+            }
+          >
+            {isSaving ? `${name} (saving...)` : name}
+          </span>
+        )}
         <button
           type="button"
           onClick={() => setExpanded((prev) => !prev)}
-          className="flex flex-1 items-center justify-between rounded-md text-left text-sm font-semibold hover:bg-accent"
+          className="shrink-0 text-xs text-muted-foreground hover:text-foreground"
         >
-          <span>{title}</span>
-          <span className="text-xs text-muted-foreground">
-            {notes.length} {expanded ? "▾" : "▸"}
-          </span>
+          {notes.length} {expanded ? "▾" : "▸"}
         </button>
-        {collectionId !== undefined && (
-          <button
-            type="button"
-            onClick={handleRename}
-            disabled={isRenaming}
-            className="shrink-0 rounded px-1 text-xs font-normal text-muted-foreground opacity-0 hover:bg-accent hover:text-foreground group-hover:opacity-100"
-          >
-            {isRenaming ? "..." : "Rename"}
-          </button>
-        )}
       </div>
       {expanded && (
         <div className="mt-1 flex flex-col gap-1 px-1">
