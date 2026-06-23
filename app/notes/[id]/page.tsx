@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getCollections, getNote, getTags, updateNote, deleteNote } from "@/lib/db";
 import { CollectionPicker } from "@/components/notes/collection-picker";
 import { TagEditor } from "@/components/notes/tag-editor";
+import { ExportMarkdownButton } from "@/components/notes/export-markdown-button";
 
 export default async function NoteEditorPage({
   params,
@@ -23,9 +24,12 @@ export default async function NoteEditorPage({
     <div className="mx-auto max-w-2xl p-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Edit note</h1>
-        <Link href="/notes" className="text-sm underline underline-offset-4">
-          Back to notes
-        </Link>
+        <div className="flex items-center gap-4">
+          <ExportMarkdownButton title={note.title} body={note.body} />
+          <Link href="/notes" className="text-sm underline underline-offset-4">
+            Back to notes
+          </Link>
+        </div>
       </div>
 
       <div className="mb-6 flex flex-col gap-4 rounded-md border p-4">
