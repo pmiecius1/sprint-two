@@ -60,9 +60,4 @@ downloads the note as a `.md` file.
 Built on its own branch and shipped via pull request:
 [#12 Add export-to-markdown button on the note page](https://github.com/pmiecius1/sprint-two/pull/12)
 
-**Loading states** — while notes are being fetched, the app shows a
-skeleton placeholder instead of a blank page, so the screen never flashes
-empty.
-
-Built on its own branch and shipped via pull request:
-[#15 Add loading skeletons for the notes workspace](https://github.com/pmiecius1/sprint-two/pull/15)
+**Loading states** - Show a skeleton or spinner while documents are being fetched from Supabase, so the page never flashes a blank list.
