@@ -196,7 +196,7 @@ export async function addTagToNote(noteId: number, tagName: string): Promise<Tag
 
   const { data: tag, error: tagError } = await supabase
     .from("tags")
-    .upsert({ name: trimmed }, { onConflict: "name" })
+    .upsert({ name: trimmed }, { onConflict: "user_id,name" })
     .select("id, name, color")
     .single();
 

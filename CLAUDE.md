@@ -18,6 +18,11 @@ helper files (e.g. `lib/collections.ts`, `lib/tags.ts`) and don't call
 `supabase.from(...)` directly from pages or components. As collections, tags, and
 note_tags get real CRUD code, add it to `lib/db.ts` rather than a new module.
 
+Documents (notes, collections, tags) are persisted in Supabase and scoped to the
+signed-in user via `user_id` + RLS — a user must only ever see documents they
+created. `localStorage` and `sessionStorage` are not acceptable persistence layers
+for this project — no document data may live in either, under any circumstances.
+
 ## Authentication rules
 
 - Use Supabase Auth for all sign-in and session handling — never build custom auth or store passwords yourself.
