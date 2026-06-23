@@ -104,7 +104,7 @@ export async function updateNote(formData: FormData) {
 
   revalidatePath("/notes");
   revalidatePath(`/notes/${id}`);
-  redirect(`/notes/${id}`);
+  redirect("/notes");
 }
 
 export async function deleteNote(formData: FormData) {
