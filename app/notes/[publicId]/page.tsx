@@ -8,12 +8,11 @@ import { ExportMarkdownButton } from "@/components/notes/export-markdown-button"
 export default async function NoteEditorPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ publicId: string }>;
 }) {
-  const { id } = await params;
-  const noteId = Number(id);
+  const { publicId } = await params;
   const [note, collections, allTags] = await Promise.all([
-    getNote(noteId),
+    getNote(publicId),
     getCollections(),
     getTags(),
   ]);

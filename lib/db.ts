@@ -10,6 +10,7 @@ export type Collection = { id: number; name: string; created_at: string };
 
 export type Note = {
   id: number;
+  publicId: string;
   title: string;
   body: string | null;
   created_at: string;
@@ -20,6 +21,7 @@ export type Note = {
 
 type RawNoteRow = {
   id: number;
+  public_id: string;
   title: string;
   body: string | null;
   created_at: string;
@@ -29,11 +31,12 @@ type RawNoteRow = {
 };
 
 const NOTE_SELECT =
-  "id, title, body, created_at, updated_at, collection_id, note_tags(tags(id, name, color))";
+  "id, public_id, title, body, created_at, updated_at, collection_id, note_tags(tags(id, name, color))";
 
 function mapNote(row: RawNoteRow): Note {
   return {
     id: row.id,
+    publicId: row.public_id,
     title: row.title,
     body: row.body,
     created_at: row.created_at,
@@ -56,12 +59,12 @@ export async function getNotes(): Promise<Note[]> {
   return (data as unknown as RawNoteRow[]).map(mapNote);
 }
 
-export async function getNote(id: number): Promise<Note | null> {
+export async function getNote(publicId: string): Promise<Note | null> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("notes")
     .select(NOTE_SELECT)
-    .eq("id", id)
+    .eq("public_id", publicId)
     .maybeSingle();
 
   if (error) throw new Error(error.message);
@@ -78,13 +81,13 @@ export async function createNote(formData: FormData) {
   const { data, error } = await supabase
     .from("notes")
     .insert({ title, body })
-    .select("id")
+    .select("public_id")
     .single();
 
   if (error) throw new Error(error.message);
 
   revalidatePath("/notes");
-  redirect(`/notes/${data.id}`);
+  redirect(`/notes/${data.public_id}`);
 }
 
 export async function updateNote(formData: FormData) {
