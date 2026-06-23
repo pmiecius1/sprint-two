@@ -163,6 +163,24 @@ export async function createCollection(name: string): Promise<Collection> {
   return data;
 }
 
+export async function updateCollectionName(
+  collectionId: number,
+  name: string,
+): Promise<void> {
+  const trimmed = name.trim();
+  if (!trimmed) throw new Error("Collection name is required");
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("collections")
+    .update({ name: trimmed })
+    .eq("id", collectionId);
+
+  if (error) throw new Error(error.message);
+
+  revalidatePath("/notes");
+}
+
 export async function getTags(): Promise<Tag[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
