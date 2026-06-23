@@ -39,7 +39,7 @@ export function LoginForm({
         password,
       });
       if (error) throw error;
-      router.push("/workspace");
+      router.push("/notes");
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {
@@ -56,7 +56,7 @@ export function LoginForm({
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback?next=/workspace`,
+          redirectTo: `${window.location.origin}/auth/callback?next=/notes`,
         },
       });
       if (error) throw error;
