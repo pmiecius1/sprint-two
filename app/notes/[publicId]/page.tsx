@@ -8,12 +8,11 @@ import { ExportMarkdownButton } from "@/components/notes/export-markdown-button"
 export default async function NoteEditorPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ publicId: string }>;
 }) {
-  const { id } = await params;
-  const noteId = Number(id);
+  const { publicId } = await params;
   const [note, collections, allTags] = await Promise.all([
-    getNote(noteId),
+    getNote(publicId),
     getCollections(),
     getTags(),
   ]);
@@ -35,10 +34,16 @@ export default async function NoteEditorPage({
       <div className="mb-6 flex flex-col gap-4 rounded-md border p-4">
         <CollectionPicker
           noteId={note.id}
+          notePublicId={note.publicId}
           collections={collections}
           currentCollectionId={note.collection_id}
         />
-        <TagEditor noteId={note.id} tags={note.tags} allTags={allTags} />
+        <TagEditor
+          noteId={note.id}
+          notePublicId={note.publicId}
+          tags={note.tags}
+          allTags={allTags}
+        />
       </div>
 
       <form action={updateNote} className="flex flex-col gap-4">

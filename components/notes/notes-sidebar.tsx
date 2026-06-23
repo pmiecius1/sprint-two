@@ -10,7 +10,7 @@ import { TagDot, TagColorPicker } from "@/components/notes/tag-color-picker";
 function NoteCard({ note }: { note: Note }) {
   return (
     <Link
-      href={`/notes/${note.id}`}
+      href={`/notes/${note.publicId}`}
       className="block rounded-md p-2 text-sm hover:bg-accent"
     >
       <div className="font-medium">{note.title}</div>
