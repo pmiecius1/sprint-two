@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { getCollections, getNotes, getTags } from "@/lib/db";
 import { NotesWorkspace } from "@/components/notes/notes-workspace";
+import { NotesWorkspaceSkeleton } from "@/components/notes/notes-workspace-skeleton";
 import { AuthButton } from "@/components/auth-button";
 
 async function NotesWorkspaceData({ children }: { children: React.ReactNode }) {
@@ -32,13 +33,7 @@ export default function NotesLayout({
   children: React.ReactNode;
 }) {
   return (
-    <Suspense
-      fallback={
-        <div className="flex min-h-svh w-full items-center justify-center text-sm text-muted-foreground">
-          Loading...
-        </div>
-      }
-    >
+    <Suspense fallback={<NotesWorkspaceSkeleton />}>
       <NotesWorkspaceData>{children}</NotesWorkspaceData>
     </Suspense>
   );
