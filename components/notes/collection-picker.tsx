@@ -7,10 +7,12 @@ import type { Collection } from "@/lib/db";
 
 export function CollectionPicker({
   noteId,
+  notePublicId,
   collections,
   currentCollectionId,
 }: {
   noteId: number;
+  notePublicId: string;
   collections: Collection[];
   currentCollectionId: number | null;
 }) {
@@ -23,7 +25,7 @@ export function CollectionPicker({
 
     setIsSaving(true);
     try {
-      await updateNoteCollection(noteId, collectionId);
+      await updateNoteCollection(noteId, notePublicId, collectionId);
       router.refresh();
     } finally {
       setIsSaving(false);

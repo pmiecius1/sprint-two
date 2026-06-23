@@ -34,10 +34,16 @@ export default async function NoteEditorPage({
       <div className="mb-6 flex flex-col gap-4 rounded-md border p-4">
         <CollectionPicker
           noteId={note.id}
+          notePublicId={note.publicId}
           collections={collections}
           currentCollectionId={note.collection_id}
         />
-        <TagEditor noteId={note.id} tags={note.tags} allTags={allTags} />
+        <TagEditor
+          noteId={note.id}
+          notePublicId={note.publicId}
+          tags={note.tags}
+          allTags={allTags}
+        />
       </div>
 
       <form action={updateNote} className="flex flex-col gap-4">

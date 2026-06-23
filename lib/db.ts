@@ -106,7 +106,6 @@ export async function updateNote(formData: FormData) {
   if (error) throw new Error(error.message);
 
   revalidatePath("/notes");
-  revalidatePath(`/notes/${id}`);
   redirect("/notes");
 }
 
@@ -124,6 +123,7 @@ export async function deleteNote(formData: FormData) {
 
 export async function updateNoteCollection(
   noteId: number,
+  notePublicId: string,
   collectionId: number | null,
 ) {
   const supabase = await createClient();
@@ -135,7 +135,7 @@ export async function updateNoteCollection(
   if (error) throw new Error(error.message);
 
   revalidatePath("/notes");
-  revalidatePath(`/notes/${noteId}`);
+  revalidatePath(`/notes/${notePublicId}`);
 }
 
 export async function getCollections(): Promise<Collection[]> {
@@ -209,7 +209,11 @@ export async function updateTagColor(tagId: number, color: string) {
   revalidatePath("/notes");
 }
 
-export async function addTagToNote(noteId: number, tagName: string): Promise<Tag> {
+export async function addTagToNote(
+  noteId: number,
+  notePublicId: string,
+  tagName: string,
+): Promise<Tag> {
   const trimmed = tagName.trim();
   if (!trimmed) throw new Error("Tag name is required");
 
@@ -232,12 +236,16 @@ export async function addTagToNote(noteId: number, tagName: string): Promise<Tag
 
   if (linkError) throw new Error(linkError.message);
 
-  revalidatePath(`/notes/${noteId}`);
+  revalidatePath(`/notes/${notePublicId}`);
   revalidatePath("/notes");
   return tag;
 }
 
-export async function removeTagFromNote(noteId: number, tagId: number) {
+export async function removeTagFromNote(
+  noteId: number,
+  notePublicId: string,
+  tagId: number,
+) {
   const supabase = await createClient();
   const { error } = await supabase
     .from("note_tags")
@@ -247,6 +255,6 @@ export async function removeTagFromNote(noteId: number, tagId: number) {
 
   if (error) throw new Error(error.message);
 
-  revalidatePath(`/notes/${noteId}`);
+  revalidatePath(`/notes/${notePublicId}`);
   revalidatePath("/notes");
 }

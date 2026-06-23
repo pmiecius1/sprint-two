@@ -8,10 +8,12 @@ import { TagColorPicker } from "@/components/notes/tag-color-picker";
 
 export function TagEditor({
   noteId,
+  notePublicId,
   tags,
   allTags,
 }: {
   noteId: number;
+  notePublicId: string;
   tags: Tag[];
   allTags: Tag[];
 }) {
@@ -25,7 +27,7 @@ export function TagEditor({
 
     setIsSaving(true);
     try {
-      await addTagToNote(noteId, newTag.trim());
+      await addTagToNote(noteId, notePublicId, newTag.trim());
       setNewTag("");
       router.refresh();
     } finally {
@@ -36,7 +38,7 @@ export function TagEditor({
   async function handleRemove(tagId: number) {
     setIsSaving(true);
     try {
-      await removeTagFromNote(noteId, tagId);
+      await removeTagFromNote(noteId, notePublicId, tagId);
       router.refresh();
     } finally {
       setIsSaving(false);
